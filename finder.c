@@ -41,7 +41,7 @@ int main(int argc, const char *argv[]) {
 
     if (!(file = fopen(argv[i + 1], "rb"))) {
       printf("Failed to open file %s", argv[i + 1]);
-      break;
+      goto exit2;
     }
     //calculate md5 sum for the opened file
     MD5_Init(&mdContext);
@@ -50,12 +50,12 @@ int main(int argc, const char *argv[]) {
     }
     MD5_Final(checksums[i]->data, &mdContext);
     checksums[i]->match = 0;
-    #ifdef DEBUG
+#ifdef DEBUG
     for (j = 0; j < MD5_DIGEST_LENGTH; ++j) {
       printf("%02x", checksums[i]->data[j]);
     }
     printf(" %s\n", argv[i + 1]);
-    #endif
+#endif
     fclose(file);
   }
 
