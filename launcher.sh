@@ -26,14 +26,7 @@ ARGS=""
 while IFS= read -r -d $'\0' file; do
   ARGS+=" $file"
 done < <(find $1 -type f -print0)
-#echo $ARGS
 #launch the binary with the concatted string as a parameter
-$FINDERPATH $ARGS 
-#parse the output
-#
-#while IFS= read -r -d $'\0' file; do
-#    a[i++]="$file"        # or however you want to process each file
-#done < <(find $1 -type f -print0)
-#echo $a
+$FINDERPATH $ARGS | wc -w
 
 exit 0
