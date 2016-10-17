@@ -6,7 +6,7 @@
 #include <string.h>
 
 #define COUNT 1024
-#define DEBUG
+//#define DEBUG
 
 struct sumInfo {
   unsigned char data[MD5_DIGEST_LENGTH];
@@ -71,11 +71,13 @@ int main(int argc, const char *argv[]) {
       }
     }
     if (printing) {
-      printf ("%s\n", argv[i + 1]);
+//      printf ("%s\n", argv[i + 1]);
+      printf ("%s", argv[i + 1]);
       printing = 0;
     }
   }
 
+  printf("\n");
   ret = 0;
 
   for (i = 0; i < argsAmount; ++i) {

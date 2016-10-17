@@ -1,5 +1,5 @@
 #!/bin/bash
-FINDERPATH="finder"
+FINDERPATH="./finder"
 if [ ! -f $FINDERPATH ]
   then
     echo "$FINDERPATH doesn't exist"
@@ -22,7 +22,13 @@ elif [ ! -d $1 ]
     exit 1
 fi
 #concat a long string from the files in the root dir
+ARGS=""
+while IFS= read -r -d $'\0' file; do
+  ARGS+=" $file"
+done < <(find $1 -type f -print0)
+#echo $ARGS
 #launch the binary with the concatted string as a parameter
+$FINDERPATH $ARGS 
 #parse the output
 #
 #while IFS= read -r -d $'\0' file; do
