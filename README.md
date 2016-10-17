@@ -11,4 +11,4 @@ Here's the test coding problem for you to solve:
 
 Note: Utility must be as RAM/CPU effective as possible, be written in plain C. However it is allowed to use standard helpers libraries that are commonly part of Linux distribution: libc, libcrypt.
 
-2. Also create Linux helper script (bash) that will recursively find all files from given root path and will call that utility, specifying all found files in its command line. Finally, script should analyze the output of utility and print total number of duplicate files found.
+- Also create Linux helper script (bash) that will recursively find all files from given root path and will call that utility, specifying all found files in its command line. Finally, script should analyze the output of utility and print total number of duplicate files found.
