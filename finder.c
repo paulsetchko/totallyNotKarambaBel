@@ -64,7 +64,7 @@ int main(int argc, const char *argv[]) {
       continue;
     }
     for (j = i + 1; j < argsAmount; ++j) {
-      if (!strcmp(checksums[i]->data, checksums[j]->data)) {
+      if (!strcmp((char *)checksums[i]->data, (char *)checksums[j]->data)) {
         checksums[j]->match = 1;
         printing = 1;
         printf("%s ", argv[j + 1]);
