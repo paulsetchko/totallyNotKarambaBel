@@ -2,6 +2,11 @@
 
 #define __FINDER_H__
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <openssl/md5.h>
+
 #define COUNT 1024
 //#define DEBUG
 
