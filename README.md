@@ -27,7 +27,7 @@ gcc -g -Werror -Wall finder.c main.c -o finder -lcrypto
 
 [root@localhost karambabel]# ./launcher.sh .
 
-3
+4
 
 
 
