@@ -27,6 +27,6 @@ while IFS= read -r -d $'\0' file; do
   ARGS+=" $file"
 done < <(find $1 -type f -print0)
 #launch the binary with the concatted string as a parameter
-$FINDERPATH $ARGS | wc -w
+$FINDERPATH $ARGS | wc -l
 
 exit 0

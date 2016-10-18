@@ -28,7 +28,7 @@ int main(int argc, const char *argv[]) {
       if (!memcmp(data + i*STRUCTSIZE, data + j*STRUCTSIZE, MD5_DIGEST_LENGTH)) {
         ((struct sumInfo *)(data + j*STRUCTSIZE))->match = 1;
         printing = 1;
-        printf("%s ", argv[j + 1]);
+        printf("%s\n", argv[j + 1]);
       }
     }
     if (printing) {
