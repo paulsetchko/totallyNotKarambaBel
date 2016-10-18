@@ -23,7 +23,7 @@ Here's the example of the output:
 
 [root@localhost karambabel]# make
 
-gcc -g -Werror -Wall finder.c -o finder -lcrypto
+gcc -g -Werror -Wall finder.c main.c -o finder -lcrypto
 
 [root@localhost karambabel]# ./launcher.sh .
 
