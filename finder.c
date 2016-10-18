@@ -5,86 +5,86 @@
 #include <openssl/md5.h>
 #include <string.h>
 
-#define COUNT 1024
-//#define DEBUG
+#include "finder.h"
 
-struct sumInfo {
-  unsigned char data[MD5_DIGEST_LENGTH];
-  unsigned char match;
-};
+#define STRUCTSIZE sizeof(struct sumInfo)
+
+//can't think of a way to handle the return type since it was mentioned that
+////a failure when getting a file descriptor is a possible situation and
+////should not be treated as a programm failure
+////but for the sake of a future handling function has a return code, yup
+int md5File(void *rawData, const char *fileName) {
+  int ret = -1;
+  uint32_t bytes;
+  MD5_CTX mdContext;
+  unsigned char data[COUNT];
+  FILE *file = NULL;
+  struct sumInfo *item = (struct sumInfo*)rawData;
+
+  if (!(file = fopen(fileName, "rb"))) {
+#ifdef DEBUG
+    printf("Failed to open file %s\n", fileName);
+#endif
+    goto exit;
+  }
+  MD5_Init(&mdContext);
+  while ((bytes = fread(data, 1, COUNT, file)) != 0) {
+    MD5_Update(&mdContext, data, bytes);
+  }
+  MD5_Final(item->data, &mdContext);
+  item->match = 0;
+  fclose(file);
+
+#ifdef DEBUG
+  for (i = 0; i < MD5_DIGEST_LENGTH; ++i) {
+    printf("%02x", item->data[i]);
+  }
+  printf(" %s\n", fileName);
+#endif
+
+  ret = 0;
+
+exit:
+  return ret;
+}
+
 
 int main(int argc, const char *argv[]) {
   int ret = -1;
-  MD5_CTX mdContext;
   uint32_t i, j;
   uint64_t argsAmount = argc - 1;
   uint8_t printing = 0;
-  uint32_t bytes;
-  unsigned char data[COUNT];
-  //the [argc - 1][MD5_DIGEST_LENGTH] array
-  struct sumInfo **checksums = NULL;
+  void *data = NULL;
 
-  if (!(checksums = malloc(argsAmount * sizeof(unsigned char *)))) {
+  if (!(data = calloc(argsAmount, STRUCTSIZE))) {
     printf("Memory allocation error\n");
-    goto exit1;
-  }
-  for (i = 0; i < argsAmount; ++i) {
-    if (!(checksums[i] = malloc(sizeof(struct sumInfo)))) {
-      printf("Memory allocation error\n");
-      goto exit2;
-    }
+    goto exit;
   }
 
   for (i = 0; i < argsAmount; ++i) {
-    //open a file passed
-    FILE *file = NULL;
-
-    if (!(file = fopen(argv[i + 1], "rb"))) {
-      printf("Failed to open file %s", argv[i + 1]);
-      goto exit2;
-    }
-    //calculate md5 sum for the opened file
-    MD5_Init(&mdContext);
-    while ((bytes = fread(data, 1, COUNT, file)) != 0) {
-      MD5_Update(&mdContext, data, bytes);
-    }
-    MD5_Final(checksums[i]->data, &mdContext);
-    checksums[i]->match = 0;
-#ifdef DEBUG
-    for (j = 0; j < MD5_DIGEST_LENGTH; ++j) {
-      printf("%02x", checksums[i]->data[j]);
-    }
-    printf(" %s\n", argv[i + 1]);
-#endif
-    fclose(file);
+    md5File(data + i*STRUCTSIZE, argv[i + 1]);
   }
 
   for (i = 0; i < argsAmount; ++i) {
-    if (checksums[i]->match) {
+    if (((struct sumInfo *)(data + i*STRUCTSIZE))->match) {
       continue;
     }
     for (j = i + 1; j < argsAmount; ++j) {
-      if (!strcmp((char *)checksums[i]->data, (char *)checksums[j]->data)) {
-        checksums[j]->match = 1;
+      if (!memcmp(data + i*STRUCTSIZE, data + j*STRUCTSIZE, MD5_DIGEST_LENGTH)) {
+        ((struct sumInfo *)(data + j*STRUCTSIZE))->match = 1;
         printing = 1;
         printf("%s ", argv[j + 1]);
       }
     }
     if (printing) {
-//      printf ("%s\n", argv[i + 1]);
-      printf ("%s", argv[i + 1]);
+      printf ("%s\n", argv[i + 1]);
       printing = 0;
     }
   }
 
-  printf("\n");
   ret = 0;
+  free(data);
 
-  for (i = 0; i < argsAmount; ++i) {
-    free(checksums[i]);
-  }
-exit2:
-  free(checksums);
-exit1:
+exit:
   return ret;
 }
