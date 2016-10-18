@@ -1,5 +1,4 @@
-# karambabel
-The repository for the test task for Karamba Bel
+# totallyNotKarambaBel
 
 Here's the test coding problem for you to solve:
 
@@ -21,11 +20,11 @@ To clean the project, run "make clean" command from the repository root folder.
 
 Here's the example of the output:
 
-[root@localhost karambabel]# make
+[root@localhost totallyNotKarambaBel]$ make
 
 gcc -g -Werror -Wall finder.c main.c -o finder -lcrypto
 
-[root@localhost karambabel]# ./launcher.sh .
+[root@localhost totallyNotKarambaBel]$ ./launcher.sh .
 
 4
 
